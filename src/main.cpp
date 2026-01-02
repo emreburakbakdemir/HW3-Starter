@@ -387,16 +387,14 @@ int main(int argc, const char *argv[]) {
     glBindVertexArray(bgSphere.vaoId);
 
     // Large sphere centered on camera with orthographic projection
+    // Simple model matrix - just a unit sphere (shader handles the rest)
     glm::mat4x4 bgModel = glm::identity<glm::mat4x4>();
-    bgModel = glm::translate(bgModel, state.pos);
-    bgModel = glm::scale(bgModel, glm::vec3(100.0f));
-
-    glm::mat4x4 bgProj = glm::ortho(-1.0f, 1.0f, -1.0f, 1.0f, 0.01f, 200.0f);
 
     glActiveShaderProgram(state.renderPipeline, bgVShader.shaderId);
     glUniformMatrix4fv(U_TRANSFORM_MODEL, 1, false, glm::value_ptr(bgModel));
     glUniformMatrix4fv(U_TRANSFORM_VIEW, 1, false, glm::value_ptr(view));
-    glUniformMatrix4fv(U_TRANSFORM_PROJ, 1, false, glm::value_ptr(bgProj));
+    glUniformMatrix4fv(U_TRANSFORM_PROJ, 1, false,
+                       glm::value_ptr(proj)); // Use same projection as planets
 
     glActiveShaderProgram(state.renderPipeline, bgFShader.shaderId);
     glActiveTexture(GL_TEXTURE0);
@@ -450,7 +448,7 @@ int main(int argc, const char *argv[]) {
         glUniform3fv(U_LIGHT_COLOR, 1, glm::value_ptr(sunColor));
         glUniform3fv(U_EYE_POS, 1, glm::value_ptr(state.pos));
         glUniformMatrix4fv(U_LIGHT_VP, 1, false, glm::value_ptr(lightVP));
-        glUniform1i(U_USE_SHADOWS, 0); // Disabled for debugging
+        glUniform1i(U_USE_SHADOWS, 1);
 
         glActiveTexture(GL_TEXTURE0);
         glBindTexture(GL_TEXTURE_2D, earthTex.textureId);
@@ -467,7 +465,7 @@ int main(int argc, const char *argv[]) {
         glUniform3fv(U_LIGHT_COLOR, 1, glm::value_ptr(sunColor));
         glUniform3fv(U_EYE_POS, 1, glm::value_ptr(state.pos));
         glUniformMatrix4fv(U_LIGHT_VP, 1, false, glm::value_ptr(lightVP));
-        glUniform1i(U_USE_SHADOWS, 0); // Disabled for debugging
+        glUniform1i(U_USE_SHADOWS, 1);
 
         glActiveTexture(GL_TEXTURE0);
         glBindTexture(GL_TEXTURE_2D, moonTex.textureId);
@@ -478,8 +476,7 @@ int main(int argc, const char *argv[]) {
                      nullptr);
     }
 
-    // Render Earth clouds separately - DISABLED FOR DEBUGGING
-    /*
+    // Render Earth clouds separately
     {
       glEnable(GL_BLEND);
       glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
@@ -525,7 +522,6 @@ int main(int argc, const char *argv[]) {
       glDepthMask(GL_TRUE);
       glDisable(GL_BLEND);
     }
-    */
 
     glfwSwapBuffers(state.window);
   }
