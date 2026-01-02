@@ -3,7 +3,6 @@
 #include <cassert>
 #include <string>
 
-
 #include <glad/glad.h>
 #include <glm/glm.hpp>
 
@@ -42,7 +41,7 @@ struct GLState {
   glm::vec3 pos = glm::vec3(0.0f, 0.0f, 10.0f);
   glm::vec3 up = glm::vec3(0.0f, 1.0f, 0.0f);
   // Camera control
-  float cameraYaw = 3.14159f; // PI - look towards origin (negative Z direction)
+  float cameraYaw = 0.0f;
   float cameraPitch = 0.0f;
   float cameraDistance = 10.0f;
   bool mouseLeftPressed = false;

@@ -57,9 +57,11 @@ void UpdateCamera(GLState &state, GLFWwindow *wnd, float deltaTime) {
   {
     // WASD movement
     float moveSpeed = 5.0f * deltaTime;
+    // At yaw=0, look towards -Z (where planets are)
     glm::vec3 forward(glm::cos(state.cameraPitch) * glm::sin(state.cameraYaw),
                       glm::sin(state.cameraPitch),
-                      glm::cos(state.cameraPitch) * glm::cos(state.cameraYaw));
+                      -glm::cos(state.cameraPitch) *
+                          glm::cos(state.cameraYaw)); // Negative Z
     glm::vec3 right = glm::normalize(glm::cross(forward, glm::vec3(0, 1, 0)));
 
     if (glfwGetKey(wnd, GLFW_KEY_W) == GLFW_PRESS)
