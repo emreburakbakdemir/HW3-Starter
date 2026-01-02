@@ -450,7 +450,7 @@ int main(int argc, const char *argv[]) {
         glUniform3fv(U_LIGHT_COLOR, 1, glm::value_ptr(sunColor));
         glUniform3fv(U_EYE_POS, 1, glm::value_ptr(state.pos));
         glUniformMatrix4fv(U_LIGHT_VP, 1, false, glm::value_ptr(lightVP));
-        glUniform1i(U_USE_SHADOWS, 1);
+        glUniform1i(U_USE_SHADOWS, 0); // Disabled for debugging
 
         glActiveTexture(GL_TEXTURE0);
         glBindTexture(GL_TEXTURE_2D, earthTex.textureId);
@@ -467,7 +467,7 @@ int main(int argc, const char *argv[]) {
         glUniform3fv(U_LIGHT_COLOR, 1, glm::value_ptr(sunColor));
         glUniform3fv(U_EYE_POS, 1, glm::value_ptr(state.pos));
         glUniformMatrix4fv(U_LIGHT_VP, 1, false, glm::value_ptr(lightVP));
-        glUniform1i(U_USE_SHADOWS, 1);
+        glUniform1i(U_USE_SHADOWS, 0); // Disabled for debugging
 
         glActiveTexture(GL_TEXTURE0);
         glBindTexture(GL_TEXTURE_2D, moonTex.textureId);
@@ -478,7 +478,8 @@ int main(int argc, const char *argv[]) {
                      nullptr);
     }
 
-    // Render Earth clouds separately
+    // Render Earth clouds separately - DISABLED FOR DEBUGGING
+    /*
     {
       glEnable(GL_BLEND);
       glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
@@ -524,6 +525,7 @@ int main(int argc, const char *argv[]) {
       glDepthMask(GL_TRUE);
       glDisable(GL_BLEND);
     }
+    */
 
     glfwSwapBuffers(state.window);
   }
