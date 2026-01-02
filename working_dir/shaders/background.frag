@@ -10,10 +10,6 @@ uniform T_TEXTURE sampler2D tTexture;
 
 void main(void)
 {
-	// DEBUG: Output solid blue to verify background is rendering
-	fboColor = vec4(0.0, 0.0, 1.0, 1.0);
-	return;
-
 	// Convert 3D position to spherical UV coordinates
 	vec3 dir = normalize(fTexCoord);
 	float u = 0.5 + atan(dir.z, dir.x) / (2.0 * 3.14159265359);
