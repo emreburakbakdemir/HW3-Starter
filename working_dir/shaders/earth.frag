@@ -45,10 +45,6 @@ uniform T_SHADOW_MAP sampler2D tShadowMap;
 
 void main(void)
 {
-	// DEBUG: Output solid green to verify Earth is rendering
-	fboColor = vec4(0.0, 1.0, 0.0, 1.0);
-	return;
-
 	// Sample textures
 	vec3 albedo = texture(tAlbedo, fUV).rgb;
 	float specularMask = texture(tSpecular, fUV).r;

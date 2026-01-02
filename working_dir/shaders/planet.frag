@@ -41,10 +41,6 @@ uniform T_SHADOW_MAP sampler2D tShadowMap;
 
 void main(void)
 {
-	// DEBUG: Output solid red to verify geometry is being rasterized
-	fboColor = vec4(1.0, 0.0, 0.0, 1.0);
-	return;
-
 	// Sample albedo texture
 	vec3 albedo = texture(tAlbedo, fUV).rgb;
 
