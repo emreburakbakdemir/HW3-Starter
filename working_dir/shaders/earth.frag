@@ -63,7 +63,7 @@ void main(void)
 	vec3 H = normalize(L + V);
 
 	// Ambient component
-	vec3 ambient = 0.1 * albedo;
+	vec3 ambient = 0.2 * albedo;
 
 	// Shadow calculation
 	float shadow = 0.0;
