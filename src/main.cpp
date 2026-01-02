@@ -1,7 +1,6 @@
 #include <array>
 #include <cstdio>
 
-
 #include "utility.h"
 
 #include <GLFW/glfw3.h>
@@ -415,6 +414,7 @@ int main(int argc, const char *argv[]) {
     glUseProgramStages(state.renderPipeline, GL_VERTEX_SHADER_BIT,
                        planetVShader.shaderId);
     glBindVertexArray(sphereMesh.vaoId);
+    glDisable(GL_CULL_FACE); // Disable culling to see full spheres
 
     // Bind shadow map
     glActiveTexture(GL_TEXTURE4);
