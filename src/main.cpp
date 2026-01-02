@@ -216,8 +216,8 @@ int main(int argc, const char *argv[]) {
       ShaderGL(ShaderGL::FRAGMENT, "working_dir/shaders/background.frag");
 
   // Load sphere meshes
-  MeshGL sphereMesh = MeshGL("working_dir/meshes/sphere_5k.obj");
-  MeshGL bgSphere = MeshGL("working_dir/meshes/sphere_2k.obj");
+  MeshGL sphereMesh = MeshGL("working_dir/meshes/sphere_80k.obj");
+  MeshGL bgSphere = MeshGL("working_dir/meshes/sphere_80k.obj");
 
   // Load textures
   TextureGL earthTex = TextureGL("working_dir/textures/2k_earth_daymap.jpg",
