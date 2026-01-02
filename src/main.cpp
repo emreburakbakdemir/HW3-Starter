@@ -216,8 +216,9 @@ int main(int argc, const char *argv[]) {
       ShaderGL(ShaderGL::FRAGMENT, "working_dir/shaders/background.frag");
 
   // Load sphere meshes
-  MeshGL sphereMesh = MeshGL("working_dir/meshes/sphere_5k.obj");
-  MeshGL bgSphere = MeshGL("working_dir/meshes/sphere_2k.obj");
+  MeshGL sphereMesh = MeshGL("working_dir/meshes/sphere_80k.obj");
+  MeshGL bgSphere = MeshGL(
+      "working_dir/meshes/sphere_5k.obj"); // Lower res for background is fine
 
   // Load textures
   TextureGL earthTex = TextureGL("working_dir/textures/2k_earth_daymap.jpg",
@@ -450,7 +451,7 @@ int main(int argc, const char *argv[]) {
         glUniform3fv(U_LIGHT_COLOR, 1, glm::value_ptr(sunColor));
         glUniform3fv(U_EYE_POS, 1, glm::value_ptr(state.pos));
         glUniformMatrix4fv(U_LIGHT_VP, 1, false, glm::value_ptr(lightVP));
-        glUniform1i(U_USE_SHADOWS, 0); // Disabled for debugging
+        glUniform1i(U_USE_SHADOWS, 1);
 
         glActiveTexture(GL_TEXTURE0);
         glBindTexture(GL_TEXTURE_2D, earthTex.textureId);
@@ -467,7 +468,7 @@ int main(int argc, const char *argv[]) {
         glUniform3fv(U_LIGHT_COLOR, 1, glm::value_ptr(sunColor));
         glUniform3fv(U_EYE_POS, 1, glm::value_ptr(state.pos));
         glUniformMatrix4fv(U_LIGHT_VP, 1, false, glm::value_ptr(lightVP));
-        glUniform1i(U_USE_SHADOWS, 0); // Disabled for debugging
+        glUniform1i(U_USE_SHADOWS, 1);
 
         glActiveTexture(GL_TEXTURE0);
         glBindTexture(GL_TEXTURE_2D, moonTex.textureId);
@@ -478,8 +479,7 @@ int main(int argc, const char *argv[]) {
                      nullptr);
     }
 
-    // Render Earth clouds separately - DISABLED FOR DEBUGGING
-    /*
+    // Render Earth clouds separately
     {
       glEnable(GL_BLEND);
       glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
@@ -525,7 +525,6 @@ int main(int argc, const char *argv[]) {
       glDepthMask(GL_TRUE);
       glDisable(GL_BLEND);
     }
-    */
 
     glfwSwapBuffers(state.window);
   }
