@@ -216,6 +216,11 @@ int main(int argc, const char *argv[]) {
       ShaderGL(ShaderGL::VERTEX, "working_dir/shaders/background.vert");
   ShaderGL bgFShader =
       ShaderGL(ShaderGL::FRAGMENT, "working_dir/shaders/background.frag");
+  // Sun shaders
+  ShaderGL sunVShader =
+      ShaderGL(ShaderGL::VERTEX, "working_dir/shaders/sun.vert");
+  ShaderGL sunFShader =
+      ShaderGL(ShaderGL::FRAGMENT, "working_dir/shaders/sun.frag");
 
   // Load sphere meshes
   MeshGL sphereMesh = MeshGL("working_dir/meshes/sphere_80k.obj");
@@ -237,6 +242,8 @@ int main(int argc, const char *argv[]) {
                                 TextureGL::LINEAR, TextureGL::REPEAT);
   TextureGL starsTex = TextureGL("working_dir/textures/8k_stars_milky_way.jpg",
                                  TextureGL::LINEAR, TextureGL::REPEAT);
+  TextureGL sunTex = TextureGL("working_dir/textures/sunmap.jpg",
+                               TextureGL::LINEAR, TextureGL::REPEAT);
 
   // Create shadow map framebuffer
   const int SHADOW_WIDTH = 2048, SHADOW_HEIGHT = 2048;
@@ -402,6 +409,43 @@ int main(int argc, const char *argv[]) {
     glActiveTexture(GL_TEXTURE0);
     glBindTexture(GL_TEXTURE_2D, starsTex.textureId);
 
+    glDrawElements(GL_TRIANGLES, bgSphere.indexCount, GL_UNSIGNED_INT, nullptr);
+
+    // ========================================
+    // SUN RENDERING (infinitely far)
+    // ========================================
+    glUseProgramStages(state.renderPipeline, GL_VERTEX_SHADER_BIT,
+                       sunVShader.shaderId);
+    glUseProgramStages(state.renderPipeline, GL_FRAGMENT_SHADER_BIT,
+                       sunFShader.shaderId);
+
+    // Position sun in the light direction (opposite of light direction vector)
+    // Scale determines apparent size of sun
+    float sunScale = 0.15f; // Apparent angular size
+    glm::vec3 sunDirection =
+        -glm::normalize(sunDir); // Sun is where light comes FROM
+
+    // Create model matrix: translate to sun direction, then billboard scale
+    glm::mat4x4 sunModel = glm::identity<glm::mat4x4>();
+    sunModel = glm::translate(sunModel, sunDirection);
+    sunModel = glm::scale(sunModel, glm::vec3(sunScale));
+
+    // Make sun always face camera (billboard) - use camera view matrix inverse
+    glm::mat4 viewNoTranslate =
+        glm::mat4(glm::mat3(view)); // Remove translation
+
+    glActiveShaderProgram(state.renderPipeline, sunVShader.shaderId);
+    glUniformMatrix4fv(U_TRANSFORM_MODEL, 1, false, glm::value_ptr(sunModel));
+    glUniformMatrix4fv(U_TRANSFORM_VIEW, 1, false,
+                       glm::value_ptr(viewNoTranslate));
+    glUniformMatrix4fv(U_TRANSFORM_PROJ, 1, false, glm::value_ptr(proj));
+
+    glActiveShaderProgram(state.renderPipeline, sunFShader.shaderId);
+    glActiveTexture(GL_TEXTURE0);
+    glBindTexture(GL_TEXTURE_2D, sunTex.textureId);
+
+    // Use a small sphere for the sun
+    glBindVertexArray(bgSphere.vaoId);
     glDrawElements(GL_TRIANGLES, bgSphere.indexCount, GL_UNSIGNED_INT, nullptr);
 
     glDepthMask(GL_TRUE);    // Re-enable depth writing
